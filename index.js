@@ -33,3 +33,17 @@ let meta = {
 console.log(meta.value + " <- Funcionou \n");
 
 const criarMeta = () => {};
+
+let metas = [
+    {
+        value : 'Ler um livro por mês',
+        checked : false
+    },
+    meta,
+    {
+        value : 'Estudar programação',
+        checked : true
+    }
+]
+
+console.log(metas[2].value)
