@@ -74,6 +74,30 @@ const metasabertas = async () => {
     })
 }
 
+const excluirmetas = async () => {
+    const metasDesmarcadas = metas.map((meta) => {
+        return {value: meta.value, checked: false}
+    })
+
+    const deletar = await checkbox({
+        message: "\nSelecione as metas a serem deletadas: ",
+        choices: [...metasDesmarcadas]
+        })
+
+    if (deletar.length == 0){
+        console.log("Nenhuma meta selecionada.\n")
+        return;
+    }
+
+    deletar.forEach((item) => {
+        metas = metas.filter((meta)=>{
+            return meta.value != item
+        })
+    })
+
+    console.log("Metas deletadas com sucesso!\n")
+}
+
 async function start() {
     console.log("BEM VINDO!\n");
 
@@ -92,6 +116,9 @@ async function start() {
             },{
                 name: "Listar metas abertas",
                 value: "Metas Abertas"
+            },{
+                name: "Excluir metas",
+                value: "Excluir"
             },{
                 name: "Sair",
                 value: "Sair"
@@ -112,6 +139,9 @@ async function start() {
                 break;
             case "Metas Abertas":
                 await metasabertas();
+                break;
+            case "Excluir":
+                await excluirmetas();
                 break;
             case "Sair":
                 console.log("Saindo...");
