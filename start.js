@@ -15,6 +15,22 @@ const cadastrarmeta = async () => {
     })
 };
 
+const realizarmetas = async () => {
+    const realizadas = metas.filter((meta) => {
+        return meta.checked
+    })
+
+    if(realizadas.length == 0){
+        console.log("Nenhuma meta realizada.\n")
+        return;
+    }
+
+    await select({
+        message: "Metas Realizadas: ",
+        choices: [...realizadas]
+    })
+}
+
 const listarmetas = async () => {
     if (metas.length == 0){
         console.log("Nenhuma meta cadastrada.\n")
@@ -44,12 +60,8 @@ const resposta = await checkbox({
         
 };
 
-//const start = () => {
-//    console.log("Teste");
-//}
-
 async function start() {
-    console.log("Teste\n");
+    console.log("BEM VINDO!\n");
 
     while (true) {
         const opcao = await select({
@@ -60,6 +72,9 @@ async function start() {
             },{
                 name: "Listar metas",
                 value: "Listar"
+            },{
+                name: "Marcar metas realizadas",
+                value: "Realizadas"
             },{
                 name: "Sair",
                 value: "Sair"
@@ -74,6 +89,9 @@ async function start() {
             case "Listar":
                 await listarmetas();
                 console.log("Metas organizadas!\n");
+                break;
+            case "Realizadas":
+                await realizarmetas();
                 break;
             case "Sair":
                 console.log("Saindo...");
