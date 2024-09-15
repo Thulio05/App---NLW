@@ -1,5 +1,6 @@
 const { select, input, checkbox } = require('@inquirer/prompts');
 
+let msg = "Bem vindo ao sistema de metas!\n";
 let metas = []
 
 const cadastrarmeta = async () => {
@@ -13,6 +14,7 @@ const cadastrarmeta = async () => {
         value: metaadd,
         checked: false
     })
+    msg = "Meta cadastrada com sucesso!\n";
 };
 
 const realizarmetas = async () => {
@@ -45,6 +47,11 @@ const listarmetas = async () => {
         choices: [...metas]
         })
 
+        if (resposta.length == 0){
+            console.log("Nenhuma meta selecionada.\n")
+            return;
+        }
+
         metas.forEach((m) => {
             m.checked = false;
         })
@@ -56,6 +63,7 @@ const listarmetas = async () => {
 
             meta.checked = true;
         })
+        msg = "Metas marcadas com sucesso!\n";
     }
 
 const metasabertas = async () => {
@@ -95,13 +103,24 @@ const excluirmetas = async () => {
         })
     })
 
-    console.log("Metas deletadas com sucesso!\n")
+    msg = ("Metas deletadas com sucesso!\n")
+}
+
+const mostrarMensagem = () => {
+    console.clear();
+    if (msg != "") {
+        console.log(msg);
+        console.log("");
+        msg = "";
+    }
 }
 
 async function start() {
     console.log("BEM VINDO!\n");
 
     while (true) {
+        mostrarMensagem();
+
         const opcao = await select({
             message: "\nMenu >",
             choices: [{
@@ -128,11 +147,9 @@ async function start() {
         switch(opcao){
             case "Cadastrar":
                 await cadastrarmeta();
-                console.log("Meta cadastrada com sucesso!\n");
                 break;
             case "Listar":
                 await listarmetas();
-                console.log("Metas organizadas!\n");
                 break;
             case "Realizadas":
                 await realizarmetas();
@@ -144,7 +161,7 @@ async function start() {
                 await excluirmetas();
                 break;
             case "Sair":
-                console.log("Saindo...");
+                console.log("Encerrando Programa...");
                 return;
         }
     }
