@@ -1,7 +1,23 @@
 const { select, input, checkbox } = require('@inquirer/prompts');
+const fs = require('fs').promises;
 
 let msg = "Bem vindo ao sistema de metas!\n";
 let metas = []
+
+const carregarMetas = async () => {
+    try {
+        const dados = await fs.readFile("metas.json", "utf-8");
+        metas = JSON.parse(dados);
+    }
+    catch (error) {
+        console.log("Erro ao carregar as metas: ", error);
+        metas = [];
+    }
+}
+
+const salvarmetas = async () => {
+    await fs.writeFile("metas.json", JSON.stringify(metas, null, 2));
+}
 
 const cadastrarmeta = async () => {
     const metaadd = await input({ message: "Digite a meta: " });
@@ -120,6 +136,8 @@ async function start() {
 
     while (true) {
         mostrarMensagem();
+        await salvarmetas();""
+        await carregarMetas();
 
         const opcao = await select({
             message: "\nMenu >",
@@ -163,8 +181,8 @@ async function start() {
             case "Sair":
                 console.log("Encerrando Programa...");
                 return;
+            }
         }
     }
-}
 
 start()
