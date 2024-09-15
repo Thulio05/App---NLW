@@ -40,25 +40,39 @@ const listarmetas = async () => {
     for(i = 0; i < metas.length; i++){
         console.log(metas[i].value);
     }
-
-const resposta = await checkbox({
-    message: "\nSelecione as metas a serem marcadas: ",
-    choices: [...metas]
-    })
-
-    metas.forEach((m) => {
-        m.checked = false;
-    })
-
-    resposta.forEach((resposta) => {
-        const meta = metas.find((m) => {
-            return m.value == resposta
+    const resposta = await checkbox({
+        message: "\nSelecione as metas a serem marcadas: ",
+        choices: [...metas]
         })
 
-        meta.checked = true;
+        metas.forEach((m) => {
+            m.checked = false;
+        })
+
+        resposta.forEach((resposta) => {
+            const meta = metas.find((m) => {
+                return m.value == resposta
+            })
+
+            meta.checked = true;
+        })
+    }
+
+const metasabertas = async () => {
+    const aberta = metas.filter((meta) =>{
+        return meta.checked == false
     })
-        
-};
+
+    if(aberta.length == 0){
+        console.log("Nenhuma meta aberta.\n")
+        return;
+    }
+
+    await select({
+        message: "Metas Abertas: ",
+        choices: [...aberta]
+    })
+}
 
 async function start() {
     console.log("BEM VINDO!\n");
@@ -76,6 +90,9 @@ async function start() {
                 name: "Marcar metas realizadas",
                 value: "Realizadas"
             },{
+                name: "Listar metas abertas",
+                value: "Metas Abertas"
+            },{
                 name: "Sair",
                 value: "Sair"
             }]
@@ -92,6 +109,9 @@ async function start() {
                 break;
             case "Realizadas":
                 await realizarmetas();
+                break;
+            case "Metas Abertas":
+                await metasabertas();
                 break;
             case "Sair":
                 console.log("Saindo...");
